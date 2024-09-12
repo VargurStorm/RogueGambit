@@ -1,0 +1,19 @@
+[gd_scene load_steps=5 format=3 uid="uid://c876jv2123cgc"]
+
+[ext_resource type="PackedScene" uid="uid://dmhfw5g8hdm0r" path="res://Scenes/ChessBoard.tscn" id="1_f15xr"]
+[ext_resource type="Script" path="res://Managers/PieceManager.cs" id="2_5swv3"]
+[ext_resource type="Script" path="res://Managers/InputManager.cs" id="3_bs7yn"]
+[ext_resource type="Script" path="res://Managers/GameStateManager.cs" id="4_6x7k6"]
+
+[node name="MainScene" type="Node2D"]
+
+[node name="BoardManager" parent="." instance=ExtResource("1_f15xr")]
+
+[node name="PieceManager" type="Node2D" parent="."]
+script = ExtResource("2_5swv3")
+
+[node name="InputManager" type="Node2D" parent="."]
+script = ExtResource("3_bs7yn")
+
+[node name="GameStateManager" type="Node" parent="."]
+script = ExtResource("4_6x7k6")

@@ -1,0 +1,36 @@
+[gd_scene load_steps=5 format=3 uid="uid://b1owothyjmbfq"]
+
+[ext_resource type="Script" path="res://Models/BoardSquare.cs" id="1_amu48"]
+
+[sub_resource type="Gradient" id="Gradient_2w1e4"]
+offsets = PackedFloat32Array(0.280851, 0.978723)
+colors = PackedColorArray(0, 0, 0, 0, 0.458647, 0.853342, 0.483724, 0.764706)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_rvct0"]
+gradient = SubResource("Gradient_2w1e4")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.974359, 0.0213675)
+metadata/_snap_enabled = true
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dv0yx"]
+size = Vector2(16, 16)
+
+[node name="BoardSquare" type="Node2D"]
+script = ExtResource("1_amu48")
+
+[node name="boardSquareColorRect" type="ColorRect" parent="."]
+offset_right = 64.0
+offset_bottom = 64.0
+mouse_filter = 2
+
+[node name="boardSquareOverlay2D" type="Sprite2D" parent="boardSquareColorRect"]
+position = Vector2(32, 32)
+texture = SubResource("GradientTexture2D_rvct0")
+
+[node name="boardSquareArea2D" type="Area2D" parent="."]
+
+[node name="boardSquareCollision2D" type="CollisionShape2D" parent="boardSquareArea2D"]
+position = Vector2(32, 32)
+scale = Vector2(4, 4)
+shape = SubResource("RectangleShape2D_dv0yx")
