@@ -8,6 +8,13 @@ public static class PieceConstants
 		Black
 	}
 
+	public enum PieceOwner
+	{
+		Player,
+		Ai,
+		None
+	}
+
 	public enum PieceType
 	{
 		Pawn,

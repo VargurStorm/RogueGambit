@@ -1,17 +1,24 @@
-[gd_scene load_steps=5 format=3 uid="uid://byus3r2kvwxms"]
+[gd_scene load_steps=7 format=3 uid="uid://byus3r2kvwxms"]
 
 [ext_resource type="Script" path="res://Models/Piece.cs" id="1_w0t4h"]
 
-[sub_resource type="Gradient" id="Gradient_d183e"]
-offsets = PackedFloat32Array(0, 0.00425532)
-colors = PackedColorArray(0, 0, 0, 0, 1, 0.94, 0.4, 0.607843)
+[sub_resource type="Gradient" id="Gradient_smrqs"]
+offsets = PackedFloat32Array(0.878542)
+colors = PackedColorArray(0.759429, 0.844411, 0.137872, 0.286275)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_cujq5"]
-gradient = SubResource("Gradient_d183e")
+gradient = SubResource("Gradient_smrqs")
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.974359, 0.0213675)
 metadata/_snap_enabled = true
+
+[sub_resource type="Gradient" id="Gradient_bs8ok"]
+offsets = PackedFloat32Array(1)
+colors = PackedColorArray(0, 0.877771, 0.691378, 0.364706)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_6dq06"]
+gradient = SubResource("Gradient_bs8ok")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tgucx"]
 size = Vector2(16, 16)
@@ -27,6 +34,10 @@ scale = Vector2(4, 4)
 [node name="pieceOverlay2D" type="Sprite2D" parent="pieceSprite2D"]
 scale = Vector2(0.25, 0.25)
 texture = SubResource("GradientTexture2D_cujq5")
+
+[node name="pieceSelected2D" type="Sprite2D" parent="pieceSprite2D"]
+scale = Vector2(0.25, 0.25)
+texture = SubResource("GradientTexture2D_6dq06")
 
 [node name="pieceArea2D" type="Area2D" parent="."]
 position = Vector2(32, 32)

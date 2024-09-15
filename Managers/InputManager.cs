@@ -1,17 +1,14 @@
-using Godot;
-using RogueGambit.Models;
-using RogueGambit.Static.Constants;
 using Piece = RogueGambit.Models.Piece;
+using static RogueGambit.Logic.InputLogic;
 
 namespace RogueGambit.Managers;
 
 public partial class InputManager : Node2D
 {
-    private Vector2 FromPosition { get; set; }
-    private Vector2 ToPosition { get; set; }
-    private bool IsPieceSelected { get; set; }
     private PieceManager PieceManager => GetNode<PieceManager>(PathConstants.PieceManager);
     private BoardManager BoardManager => GetNode<BoardManager>(PathConstants.BoardManager);
+    private GameStateManager GameStateManager => GetNode<GameStateManager>(PathConstants.GameStateManager);
+    private MoveManager MoveManager => GetNode<MoveManager>(PathConstants.MoveManager);
     public Vector2 MousePosition { get; private set; }
 
     public override void _Ready()
@@ -48,8 +45,10 @@ public partial class InputManager : Node2D
     // Pieces
     private void OnPieceClicked(Piece piece)
     {
-        FromPosition = piece.GridPosition;
-        IsPieceSelected = true;
+        GetViewport().SetInputAsHandled();
+        if (IsMyPiece(piece.PieceModel, PieceOwner.Player) && IsMyTurn(GameStateManager.GameState, PieceOwner.Player) &&
+            MoveManager.SelectedPiece is null)
+            GameStateManager.ToggleSelectedPiece(piece.PieceModel);
     }
 
     private static void OnPieceMouseEntered(Piece piece)
@@ -65,13 +64,12 @@ public partial class InputManager : Node2D
     // BoardSquares
     private void OnBoardSquareClicked(BoardSquare square)
     {
-        if (FromPosition == Vector2.Zero) return;
-        if (!IsPieceSelected) return;
-        GD.Print("Moving piece from: " + FromPosition + " to: " + square.GridPosition);
-        ToPosition = square.GridPosition;
-        GameStateManager.MovePiece(FromPosition, ToPosition);
-        ToPosition = FromPosition = Vector2.Zero;
-        IsPieceSelected = false;
+        if (MoveManager.SelectedPiece is null) return;
+        if (IsMyTurn(GameStateManager.GameState, PieceOwner.Player))
+        {
+            GameStateManager.MovePiece(MoveManager.SelectedPiece, square.GridPosition);
+            MoveManager.DeselectPiece();
+        }
     }
 
     private static void OnBoardSquareMouseEntered(BoardSquare square)

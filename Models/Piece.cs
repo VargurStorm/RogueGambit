@@ -1,7 +1,3 @@
-using System.Collections.Generic;
-using Godot;
-using RogueGambit.Static.Constants;
-
 namespace RogueGambit.Models;
 
 public partial class Piece : Node2D
@@ -15,29 +11,30 @@ public partial class Piece : Node2D
     [Signal]
     public delegate void PieceMouseExitedEventHandler(Piece piece);
 
-    private static readonly Dictionary<(PieceConstants.PieceType, PieceConstants.PieceColor), string> TextureMap = new()
+    private static readonly Dictionary<(PieceType, PieceColor), string> TextureMap = new()
     {
-        { (PieceConstants.PieceType.Pawn, PieceConstants.PieceColor.White), "res://Assets/Pieces/white_pawn.png" },
-        { (PieceConstants.PieceType.Pawn, PieceConstants.PieceColor.Black), "res://Assets/Pieces/black_pawn.png" },
-        { (PieceConstants.PieceType.Knight, PieceConstants.PieceColor.White), "res://Assets/Pieces/white_knight.png" },
-        { (PieceConstants.PieceType.Knight, PieceConstants.PieceColor.Black), "res://Assets/Pieces/black_knight.png" },
-        { (PieceConstants.PieceType.Rook, PieceConstants.PieceColor.White), "res://Assets/Pieces/white_rook.png" },
-        { (PieceConstants.PieceType.Rook, PieceConstants.PieceColor.Black), "res://Assets/Pieces/black_rook.png" },
-        { (PieceConstants.PieceType.Bishop, PieceConstants.PieceColor.White), "res://Assets/Pieces/white_bishop.png" },
-        { (PieceConstants.PieceType.Bishop, PieceConstants.PieceColor.Black), "res://Assets/Pieces/black_bishop.png" },
-        { (PieceConstants.PieceType.Queen, PieceConstants.PieceColor.White), "res://Assets/Pieces/white_queen.png" },
-        { (PieceConstants.PieceType.Queen, PieceConstants.PieceColor.Black), "res://Assets/Pieces/black_queen.png" },
-        { (PieceConstants.PieceType.King, PieceConstants.PieceColor.White), "res://Assets/Pieces/white_king.png" },
-        { (PieceConstants.PieceType.King, PieceConstants.PieceColor.Black), "res://Assets/Pieces/black_king.png" }
+        { (PieceType.Pawn, PieceColor.White), "res://Assets/Pieces/white_pawn.png" },
+        { (PieceType.Pawn, PieceColor.Black), "res://Assets/Pieces/black_pawn.png" },
+        { (PieceType.Knight, PieceColor.White), "res://Assets/Pieces/white_knight.png" },
+        { (PieceType.Knight, PieceColor.Black), "res://Assets/Pieces/black_knight.png" },
+        { (PieceType.Rook, PieceColor.White), "res://Assets/Pieces/white_rook.png" },
+        { (PieceType.Rook, PieceColor.Black), "res://Assets/Pieces/black_rook.png" },
+        { (PieceType.Bishop, PieceColor.White), "res://Assets/Pieces/white_bishop.png" },
+        { (PieceType.Bishop, PieceColor.Black), "res://Assets/Pieces/black_bishop.png" },
+        { (PieceType.Queen, PieceColor.White), "res://Assets/Pieces/white_queen.png" },
+        { (PieceType.Queen, PieceColor.Black), "res://Assets/Pieces/black_queen.png" },
+        { (PieceType.King, PieceColor.White), "res://Assets/Pieces/white_king.png" },
+        { (PieceType.King, PieceColor.Black), "res://Assets/Pieces/black_king.png" }
     };
 
     private Vector2 _gridPos;
     private Area2D _pieceArea2D;
     private CollisionShape2D _pieceCollision2D;
     private Sprite2D _pieceSprite;
+    public PieceModel PieceModel { get; set; }
 
-    [Export] public PieceConstants.PieceType PieceType { get; set; }
-    [Export] public PieceConstants.PieceColor PieceColor { get; set; }
+    [Export] public PieceType PieceType { get; set; }
+    [Export] public PieceColor PieceColor { get; set; }
 
     [Export]
     public Vector2 GridPosition
@@ -51,6 +48,7 @@ public partial class Piece : Node2D
     }
 
     [Export] public Sprite2D OverlaySprite { get; set; }
+    [Export] public Sprite2D SelectedSprite { get; set; }
 
     public override void _Ready()
     {
@@ -66,6 +64,8 @@ public partial class Piece : Node2D
         _pieceCollision2D = GetNode<CollisionShape2D>("pieceArea2D/pieceCollision2D");
         OverlaySprite = GetNode<Sprite2D>("pieceSprite2D/pieceOverlay2D");
         OverlaySprite.Visible = false;
+        SelectedSprite = GetNode<Sprite2D>("pieceSprite2D/pieceSelected2D");
+        SelectedSprite.Visible = false;
     }
 
     private void ConnectSignals()
