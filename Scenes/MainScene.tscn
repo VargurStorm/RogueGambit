@@ -1,6 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://c876jv2123cgc"]
+[gd_scene load_steps=9 format=3 uid="uid://c876jv2123cgc"]
 
 [ext_resource type="PackedScene" uid="uid://dmhfw5g8hdm0r" path="res://Scenes/ChessBoard.tscn" id="1_f15xr"]
+[ext_resource type="Script" path="res://Scenes/MainScene.cs" id="1_uaaf5"]
 [ext_resource type="Script" path="res://Managers/PieceManager.cs" id="2_5swv3"]
 [ext_resource type="Script" path="res://Managers/InputManager.cs" id="3_bs7yn"]
 [ext_resource type="Script" path="res://Managers/TurnManager.cs" id="4_1ij8x"]
@@ -9,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://h0vrb4skn4kr" path="res://Assets/UI/turn-white.png" id="4_78mpp"]
 
 [node name="MainScene" type="Node2D"]
+script = ExtResource("1_uaaf5")
 
 [node name="BoardManager" parent="." instance=ExtResource("1_f15xr")]
 

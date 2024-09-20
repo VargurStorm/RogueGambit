@@ -22,4 +22,24 @@ public static class VectorUtils
 
         return missingVectors;
     }
+
+    public static List<List<int>> BuildBoardMask(Vector2 boardShape, HashSet<Vector2> maskPositions = null)
+    {
+        var rows = (int)boardShape.Y;
+        var cols = (int)boardShape.X;
+        var boardMask = new List<List<int>>();
+
+        for (var i = 0; i < rows; i++) boardMask.Add(new List<int>(new int[cols].Select(_ => 1)));
+
+        if (maskPositions is null) return boardMask;
+
+        foreach (var maskPosition in maskPositions)
+        {
+            var row = (int)maskPosition.Y;
+            var col = (int)maskPosition.X;
+            boardMask[row][col] = 0;
+        }
+
+        return boardMask;
+    }
 }

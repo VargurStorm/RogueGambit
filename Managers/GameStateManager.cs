@@ -1,76 +1,44 @@
 namespace RogueGambit.Managers;
 
-public partial class GameStateManager : Node
+public partial class GameStateManager : Node, IGameStateManager
 {
-    private BoardManager _boardManager;
-    private GameStateManager _gameStateManager;
-    private InputManager _inputManager;
-    private MoveManager _moveManager;
-    private PieceManager _pieceManager;
-    private TurnManager _turnManager;
+    [Inject] private IBoardManager _boardManager;
+    [Inject] private IInputManager _inputManager;
+    [Inject] private IMoveManager _moveManager;
+    [Inject] private IPieceManager _pieceManager;
+    [Inject] private ITurnManager _turnManager;
+
 
     public GameState GameState { get; set; }
 
-    public override void _Ready()
-    {
-        GD.Print("...GameStateManager ready.");
-        InitializeGameState();
-        InitializeNodes();
-        LoadScenes();
-        PlaceBoard(BoardConstants.BoardStartX, new Vector2(8, 8));
-        PlacePieces();
-        ConnectSignals();
-
-        GameState.ReadGameStateFromNodes(_boardManager, _pieceManager);
-        AssignColorToOwner(PieceColor.White, PieceOwner.Player);
-        AssignColorToOwner(PieceColor.Black, PieceOwner.Ai);
-        UpdateGameState();
-        SetTurn(PieceOwner.Player);
-        GD.Print("Game state setup complete!");
-    }
-
-    private void InitializeNodes()
-    {
-        _gameStateManager = this;
-        _pieceManager = GetNode<PieceManager>("/root/MainScene/PieceManager");
-        _boardManager = GetNode<BoardManager>("/root/MainScene/BoardManager");
-        _inputManager = GetNode<InputManager>("/root/MainScene/InputManager");
-        _turnManager = GetNode<TurnManager>("/root/MainScene/TurnManager");
-        _moveManager = GetNode<MoveManager>("/root/MainScene/MoveManager");
-        GD.Print("...Game state nodes initialized!");
-    }
-
-    private void InitializeGameState()
+    public void InitializeGameState()
     {
         GameState = new GameState();
-        GD.Print("...Game state initialized!");
     }
 
-    private void LoadScenes()
+    public void LoadScenes()
     {
         _boardManager.LoadScenes();
         _pieceManager.LoadScenes();
-        GD.Print("...All scenes loaded!");
     }
 
-    private void PlaceBoard(int boardStart, Vector2 boardShape, List<Vector2> boardMasks = null)
+    public void PlaceBoard(int boardStart, Vector2 boardShape, List<List<int>> boardMask = null)
     {
-        _boardManager.PlaceBoardSquares(boardStart, boardShape, boardMasks);
+        GameState.BoardSquares = BoardManager.BuildBoardSquareModels(boardStart, boardShape, boardMask);
+        GameState.BoardSquares.Values.ToList().ForEach(square => square.UpdateNode(true));
         GameState.BoardShape = boardShape;
-        GameState.BoardMasks = boardMasks;
-        GD.Print("...All board squares placed!");
+        GameState.BoardMask = boardMask;
     }
 
-    private void PlacePieces()
+    public void PlacePieces()
     {
-        _pieceManager.PlacePieceNodes();
-        GD.Print("...All pieces placed!");
+        GameState.Pieces = PieceManager.CreatePieceModelsDefault();
+        GameState.Pieces.Values.ToList().ForEach(piece => piece.UpdateNode(true));
     }
 
-    private void ConnectSignals()
+    public void ConnectSignals()
     {
         _inputManager.ConnectSignals();
-        GD.Print("...All signals connected!");
     }
 
     public void UpdateGameState()
@@ -82,7 +50,7 @@ public partial class GameStateManager : Node
 
     public void AssignColorToOwner(PieceColor color, PieceOwner owner)
     {
-        foreach (var piece in GameState.Pieces.Where(piece => piece.Color == color)) piece.Owner = owner;
+        foreach (var piece in GameState.Pieces.Values.Where(piece => piece.Color == color)) piece.Owner = owner;
     }
 
     public void SetTurn(PieceOwner owner)
@@ -91,14 +59,28 @@ public partial class GameStateManager : Node
         _turnManager.SetTurn(owner);
     }
 
+    public override void _Ready()
+    {
+        GD.Print("...GameStateManager ready.");
+        InjectDependencies(this);
+        InitializeGameState();
+        LoadScenes();
+
+        PlaceBoard(BoardConstants.BoardStartX, new Vector2(8, 8));
+        PlacePieces();
+        ConnectSignals();
+
+        AssignColorToOwner(PieceColor.White, PieceOwner.Player);
+        AssignColorToOwner(PieceColor.Black, PieceOwner.Player);
+
+        UpdateGameState();
+        SetTurn(PieceOwner.Player);
+    }
+
+
     public void AdvanceTurn()
     {
         _turnManager.AdvanceTurn();
-    }
-
-    public void SelectPiece(PieceModel piece)
-    {
-        _moveManager.SelectPiece(piece);
     }
 
     public void DeselectPiece()

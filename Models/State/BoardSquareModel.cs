@@ -1,7 +1,28 @@
+using RogueGambit.Managers.Factory;
+
 namespace RogueGambit.Models.State;
 
-public class BoardSquareModel
+public class BoardSquareModel : INodeModel
 {
+    private readonly INodeFactory _nodeFactory;
+
+    public BoardSquareModel(BoardSquare boardSquare)
+    {
+        GridPosition = boardSquare.GridPosition;
+        SquareColor = boardSquare.SquareColor;
+        IsOccupied = boardSquare.IsOccupied;
+        Instance = boardSquare;
+        _nodeFactory = ServiceLocator.GetNodeFactory<BoardSquare>();
+    }
+
+    public BoardSquareModel(Vector2 gridPosition, Color squareColor, bool isOccupied)
+    {
+        GridPosition = gridPosition;
+        SquareColor = squareColor;
+        IsOccupied = isOccupied;
+        _nodeFactory = ServiceLocator.GetNodeFactory<BoardSquare>();
+    }
+
     public Vector2 GridPosition { get; set; }
     public Color SquareColor { get; set; }
     public bool IsOccupied { get; set; }
@@ -9,7 +30,8 @@ public class BoardSquareModel
 
     public void UpdateNode(bool create = false)
     {
-        if (create && Instance is null) Instance = new BoardSquare();
+        if (create || Instance is null) Instance = (BoardSquare)_nodeFactory.CreateNoteForModel(this);
+
         Instance.GridPosition = GridPosition;
         Instance.SquareColor = SquareColor;
         Instance.IsOccupied = IsOccupied;

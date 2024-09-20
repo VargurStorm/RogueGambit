@@ -1,79 +1,77 @@
+using RogueGambit.Managers.Factory;
+
 namespace RogueGambit.Managers;
 
-public partial class BoardManager : Node2D
+public partial class BoardManager : Node2D, INodeFactory, IBoardManager
 {
-	private PackedScene _boardSquareScene;
+    private PackedScene _boardSquareScene;
 
-	public override void _Ready()
-	{
-		GD.Print("...BoardManager ready.");
-	}
+    public void LoadScenes()
+    {
+        _boardSquareScene = GD.Load<PackedScene>(PathConstants.BoardSquareScenePath);
+        GD.Print("...Loaded board square scene.");
+    }
 
-	public void LoadScenes()
-	{
-		_boardSquareScene = GD.Load<PackedScene>(PathConstants.BoardSquareScenePath);
-		GD.Print("...Loaded board square scene.");
-	}
+    public static Dictionary<Vector2, BoardSquareModel> BuildBoardSquareModels(int boardStart, Vector2 boardShape,
+                                                                               List<List<int>> boardMask = null)
+    {
+        var boardSquares = new Dictionary<Vector2, BoardSquareModel>();
 
-	public void PlaceBoardSquares(int boardStart, Vector2 boardShape, List<Vector2> boardMasks = null)
-	{
-		if (_boardSquareScene is null)
-		{
-			GD.PrintErr("Board square scene could not be loaded.");
-			return;
-		}
+        for (var x = boardStart; x < boardShape.X; x++)
+        for (var y = boardStart; y < boardShape.Y; y++)
+        {
+            var boardPosition = new Vector2(x, y);
+            var color = (x + y) % 2 == 0 ? BoardConstants.LightSquareColor : BoardConstants.DarkSquareColor;
 
-		for (var x = boardStart; x < boardShape.X; x++)
-		for (var y = boardStart; y < boardShape.Y; y++)
-		{
-			var boardPosition = new Vector2(x, y);
-			var color = (x + y) % 2 == 0 ? BoardConstants.LightSquareColor : BoardConstants.DarkSquareColor;
+            if (boardMask is not null && boardMask[(int)boardPosition.Y][(int)boardPosition.X] == 0)
+                continue;
 
-			if (boardMasks != null && boardMasks.Contains(boardPosition))
-				continue;
+            var boardSquare = new BoardSquareModel(boardPosition, color, false);
 
-			PlaceBoardSquare(boardPosition, color);
-		}
-	}
+            boardSquares.Add(boardPosition, boardSquare);
+        }
 
-	private void PlaceBoardSquare(Vector2 boardPosition, Color color)
-	{
-		if (_boardSquareScene is null)
-		{
-			GD.PrintErr("Board square scene could not be loaded.");
-			return;
-		}
+        return boardSquares;
+    }
 
-		if (_boardSquareScene.Instantiate() is not BoardSquare boardSquare)
-		{
-			GD.PrintErr("Board square could not be instantiated.");
-			return;
-		}
+    public List<BoardSquare> GetBoardSquareNodes()
+    {
+        var boardSquares = new List<BoardSquare>();
+        foreach (var child in GetChildren())
+            if (child is BoardSquare square)
+                boardSquares.Add(square);
 
-		boardSquare.SquareColor = color;
-		boardSquare.GridPosition = boardPosition;
-		AddChild(boardSquare);
-	}
+        return boardSquares;
+    }
 
-	private void DeleteBoardSquare(Vector2 squarePosition)
-	{
-		var boardSquare = GetNode<BoardSquare>($"Square_{squarePosition.ToString()}");
-		if (boardSquare is null)
-		{
-			GD.PrintErr("Board square could not be found.");
-			return;
-		}
+    public Node2D CreateNoteForModel(INodeModel model)
+    {
+        if (model is not BoardSquareModel boardSquareModel)
+        {
+            GD.PrintErr("Board manager can only place board square models.");
+            return null;
+        }
 
-		boardSquare.QueueFree();
-	}
+        if (_boardSquareScene is null)
+        {
+            GD.PrintErr("Board square scene could not be loaded.");
+            return null;
+        }
 
-	public List<BoardSquare> GetBoardSquares()
-	{
-		var boardSquares = new List<BoardSquare>();
-		foreach (var child in GetChildren())
-			if (child is BoardSquare square)
-				boardSquares.Add(square);
+        if (_boardSquareScene.Instantiate() is not BoardSquare boardSquare)
+        {
+            GD.PrintErr("Board square could not be instantiated.");
+            return null;
+        }
 
-		return boardSquares;
-	}
+        boardSquare.SquareColor = boardSquareModel.SquareColor;
+        boardSquare.GridPosition = boardSquareModel.GridPosition;
+        AddChild(boardSquare);
+        return boardSquare;
+    }
+
+    public override void _Ready()
+    {
+        GD.Print("...BoardManager ready.");
+    }
 }

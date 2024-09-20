@@ -3,13 +3,32 @@ using static RogueGambit.Logic.InputLogic;
 
 namespace RogueGambit.Managers;
 
-public partial class InputManager : Node2D
+public partial class InputManager : Node2D, IInputManager
 {
     private PieceManager PieceManager => GetNode<PieceManager>(PathConstants.PieceManager);
     private BoardManager BoardManager => GetNode<BoardManager>(PathConstants.BoardManager);
     private GameStateManager GameStateManager => GetNode<GameStateManager>(PathConstants.GameStateManager);
     private MoveManager MoveManager => GetNode<MoveManager>(PathConstants.MoveManager);
     public Vector2 MousePosition { get; private set; }
+
+    public void ConnectSignals()
+    {
+        var allPieces = PieceManager.GetPieceNodes();
+        foreach (var piece in allPieces)
+        {
+            piece.Connect("PieceClicked", new Callable(this, nameof(OnPieceClicked)));
+            piece.Connect("PieceMouseEntered", new Callable(this, nameof(OnPieceMouseEntered)));
+            piece.Connect("PieceMouseExited", new Callable(this, nameof(OnPieceMouseExited)));
+        }
+
+        var allSquares = BoardManager.GetBoardSquareNodes();
+        foreach (var square in allSquares)
+        {
+            square.Connect("SquareClicked", new Callable(this, nameof(OnBoardSquareClicked)));
+            square.Connect("SquareMouseEntered", new Callable(this, nameof(OnBoardSquareMouseEntered)));
+            square.Connect("SquareMouseExited", new Callable(this, nameof(OnBoardSquareMouseExited)));
+        }
+    }
 
     public override void _Ready()
     {
@@ -20,26 +39,6 @@ public partial class InputManager : Node2D
     {
         if (@event is not InputEventMouseMotion mouseMotion) return;
         MousePosition = mouseMotion.Position;
-    }
-
-    // Signals
-    public void ConnectSignals()
-    {
-        var allPieces = PieceManager.GetPiecesOnBoard();
-        foreach (var piece in allPieces)
-        {
-            piece.Connect("PieceClicked", new Callable(this, nameof(OnPieceClicked)));
-            piece.Connect("PieceMouseEntered", new Callable(this, nameof(OnPieceMouseEntered)));
-            piece.Connect("PieceMouseExited", new Callable(this, nameof(OnPieceMouseExited)));
-        }
-
-        var allSquares = BoardManager.GetBoardSquares();
-        foreach (var square in allSquares)
-        {
-            square.Connect("SquareClicked", new Callable(this, nameof(OnBoardSquareClicked)));
-            square.Connect("SquareMouseEntered", new Callable(this, nameof(OnBoardSquareMouseEntered)));
-            square.Connect("SquareMouseExited", new Callable(this, nameof(OnBoardSquareMouseExited)));
-        }
     }
 
     // Pieces

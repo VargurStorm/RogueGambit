@@ -1,13 +1,9 @@
 namespace RogueGambit.Managers;
 
-public partial class MoveManager : Node2D
+public partial class MoveManager : Node2D, IMoveManager
 {
+    [Inject] private IGameStateManager _gameStateManager;
     public PieceModel SelectedPiece { get; private set; }
-
-    public override void _Ready()
-    {
-        GD.Print("...MoveManager ready.");
-    }
 
     public void SelectPiece(PieceModel piece)
     {
@@ -42,6 +38,20 @@ public partial class MoveManager : Node2D
 
     public void MovePiece(PieceModel piece, Vector2 targetPosition)
     {
+        var gameState = _gameStateManager.GameState;
+        gameState.Pieces.Remove(piece.GridPosition);
+        gameState.Pieces.Add(targetPosition, piece);
         piece.GridPosition = targetPosition;
+    }
+
+    public override void _Ready()
+    {
+        GD.Print("...MoveManager ready.");
+        Initialize();
+    }
+
+    public void Initialize()
+    {
+        InjectDependencies(this);
     }
 }

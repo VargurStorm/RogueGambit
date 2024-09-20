@@ -6,7 +6,4 @@
         <EnableDynamicLoading>true</EnableDynamicLoading>
         <RootNamespace>RogueGambit</RootNamespace>
     </PropertyGroup>
-    <ItemGroup>
-        <Folder Include="Static\Signals\"/>
-    </ItemGroup>
 </Project>

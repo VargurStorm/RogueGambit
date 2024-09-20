@@ -1,74 +1,46 @@
-using RogueGambit.Utils;
-
 namespace RogueGambit.Models.State;
 
 public class GameState
 {
     public GameState()
     {
-        BoardSquares = new List<BoardSquareModel>();
-        Pieces = new List<PieceModel>();
+        BoardSquares = new Dictionary<Vector2, BoardSquareModel>();
+        Pieces = new Dictionary<Vector2, PieceModel>();
 
         GD.Print("...BoardState object ready.");
     }
 
-    public List<BoardSquareModel> BoardSquares { get; set; }
-    public List<PieceModel> Pieces { get; set; }
+    public Dictionary<Vector2, BoardSquareModel> BoardSquares { get; set; }
+    public Dictionary<Vector2, PieceModel> Pieces { get; set; }
     public Vector2 BoardShape { get; set; }
-    public List<Vector2> BoardMasks { get; set; }
+    public List<List<int>> BoardMask { get; set; }
     public PieceOwner CurrentTurn { get; set; }
 
     public void ReadGameStateFromNodes(BoardManager boardManager, PieceManager pieceManager)
     {
-        var boardSquares = boardManager.GetBoardSquares();
-        var pieces = pieceManager.GetPiecesOnBoard();
+        var boardSquares = boardManager.GetBoardSquareNodes();
+        var pieces = pieceManager.GetPieceNodes();
 
-        foreach (var square in boardSquares)
-            BoardSquares.Add(new BoardSquareModel
-            {
-                GridPosition = square.GridPosition,
-                SquareColor = square.SquareColor,
-                IsOccupied = square.IsOccupied,
-                Instance = square
-            });
-
-        foreach (var piece in pieces)
-            Pieces.Add(new PieceModel
-            {
-                GridPosition = piece.GridPosition,
-                Color = piece.PieceColor,
-                Type = piece.PieceType,
-                Instance = piece
-            });
-    }
-
-    public void ReadBoardShape()
-    {
-        var boardSquares = BoardSquares.Select(square => square.GridPosition).ToList();
-        var boardShape = VectorUtils.GetGridSize(boardSquares);
-        var boardMasks = VectorUtils.GetGridMasks(boardShape, boardSquares);
-        BoardShape = boardShape;
-        BoardMasks = boardMasks;
+        foreach (var square in boardSquares) BoardSquares.Add(square.GridPosition, new BoardSquareModel(square));
+        foreach (var piece in pieces) Pieces.Add(piece.GridPosition, new PieceModel(piece));
     }
 
     public void FindOccupiedSquares()
     {
-        foreach (var square in BoardSquares)
+        foreach (var square in BoardSquares.Values)
         {
-            square.IsOccupied = false;
-            foreach (var piece in Pieces)
-                if (piece.GridPosition == square.GridPosition)
-                    square.IsOccupied = true;
+            square.IsOccupied = Pieces.ContainsKey(square.GridPosition);
+            square.UpdateNode();
         }
     }
 
     public void UpdateBoardNodes()
     {
-        foreach (var square in BoardSquares) square.UpdateNode();
+        foreach (var square in BoardSquares.Values) square.UpdateNode();
     }
 
     public void UpdatePieceNodes()
     {
-        foreach (var piece in Pieces) piece.UpdateNode();
+        foreach (var piece in Pieces.Values) piece.UpdateNode();
     }
 }

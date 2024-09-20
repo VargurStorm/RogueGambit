@@ -1,5 +1,3 @@
-using Godot;
-
 namespace RogueGambit.Static.Constants;
 
 public static class BoardConstants
@@ -14,4 +12,5 @@ public static class BoardConstants
 	public static Color LightSquareColor => new("D7B899");
 	public static Color DarkSquareColor => new("8B4513");
 	public static Color MaskedSquareColor => new("FF0000");
+	public static string StandardFen => "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
 }

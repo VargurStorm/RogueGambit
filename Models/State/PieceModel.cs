@@ -1,7 +1,28 @@
+using RogueGambit.Managers.Factory;
+
 namespace RogueGambit.Models.State;
 
-public class PieceModel
+public class PieceModel : INodeModel
 {
+    private readonly INodeFactory _nodeFactory;
+
+    public PieceModel(Piece piece)
+    {
+        GridPosition = piece.GridPosition;
+        Color = piece.PieceColor;
+        Type = piece.PieceType;
+        Instance = piece;
+        _nodeFactory = ServiceLocator.GetNodeFactory<Piece>();
+    }
+
+    public PieceModel(Vector2 gridPosition, PieceColor color, PieceType type)
+    {
+        GridPosition = gridPosition;
+        Color = color;
+        Type = type;
+        _nodeFactory = ServiceLocator.GetNodeFactory<Piece>();
+    }
+
     public Vector2 GridPosition { get; set; }
     public PieceColor Color { get; set; }
     public PieceType Type { get; set; }
@@ -10,7 +31,8 @@ public class PieceModel
 
     public void UpdateNode(bool create = false)
     {
-        if (create && Instance is null) Instance = new Piece();
+        if (create || Instance is null) Instance = (Piece)_nodeFactory.CreateNoteForModel(this);
+
         Instance.GridPosition = GridPosition;
         Instance.PieceType = Type;
         Instance.PieceColor = Color;
