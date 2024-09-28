@@ -18,3 +18,5 @@ mono_crash.*.json
 .idea
 bin/
 *.DS_STORE
+*.DS_Store
+Models/.DS_Store

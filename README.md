@@ -25,6 +25,13 @@ During development, some parts of the code may be commented out or return simply
 - [x] Move rotation on the fly using vectors
 - [ ] Support for moves at non-cardinal angles
 
+### Chess Board
+![the chessboard](./social/ChessBoard1.png)
+
+### Regular Movement and Custom Chained Move
+![regular movement](./social/PieceMovement1.png)
+![custom chained movement](./social/PieceMovement2.png)
+
 ## Getting Started
 
 ### Prerequisites
