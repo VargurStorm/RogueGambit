@@ -17,7 +17,7 @@ public partial class BoardSquare : Node2D
 	private ColorRect _squareColorRect;
 
 	[Export] public Color SquareColor { get; set; }
-	[Export] public Vector2 SquareSize { get; set; } = BoardConstants.SquareSizeVector;
+	[Export] public Vector2 SquareSize { get; set; } = SquareSizeVector;
 
 	[Export]
 	public Vector2 GridPosition
@@ -35,6 +35,7 @@ public partial class BoardSquare : Node2D
 	[Export] public bool IsOccupied { get; set; }
 
 	[Export] public Sprite2D OverlaySprite { get; set; }
+	[Export] public Sprite2D TargetSprite { get; set; }
 
 	public override void _Ready()
 	{
@@ -56,6 +57,8 @@ public partial class BoardSquare : Node2D
 		_squareColorRect = GetNode<ColorRect>("boardSquareColorRect");
 		OverlaySprite = GetNode<Sprite2D>("boardSquareColorRect/boardSquareOverlay2D");
 		OverlaySprite.Visible = false;
+		TargetSprite = GetNode<Sprite2D>("boardSquareColorRect/boardSquareOverlayTargets2D");
+		TargetSprite.Visible = false;
 	}
 
 	private void ConnectSignals()

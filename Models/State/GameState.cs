@@ -6,15 +6,17 @@ public class GameState
     {
         BoardSquares = new Dictionary<Vector2, BoardSquareModel>();
         Pieces = new Dictionary<Vector2, PieceModel>();
-
+        PlayerStatus = SelectingPiece;
         GD.Print("...BoardState object ready.");
     }
 
     public Dictionary<Vector2, BoardSquareModel> BoardSquares { get; set; }
     public Dictionary<Vector2, PieceModel> Pieces { get; set; }
+    public List<PieceModel> Graveyard { get; set; } = new();
     public Vector2 BoardShape { get; set; }
     public List<List<int>> BoardMask { get; set; }
     public PieceOwner CurrentTurn { get; set; }
+    public PlayerStatus PlayerStatus { get; set; }
 
     public void ReadGameStateFromNodes(BoardManager boardManager, PieceManager pieceManager)
     {
@@ -42,5 +44,10 @@ public class GameState
     public void UpdatePieceNodes()
     {
         foreach (var piece in Pieces.Values) piece.UpdateNode();
+    }
+
+    public PieceModel GetPieceAtPosition(Vector2 position)
+    {
+        return Pieces.GetValueOrDefault(position);
     }
 }

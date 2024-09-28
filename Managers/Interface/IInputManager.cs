@@ -6,6 +6,8 @@ public interface IInputManager
 {
     void ConnectSignals();
 
+    void Initialize();
+
     static void OnPieceClicked(Piece piece)
     {
         throw new NotImplementedException();

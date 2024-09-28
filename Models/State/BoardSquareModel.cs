@@ -1,4 +1,5 @@
 using RogueGambit.Managers.Factory;
+using RogueGambit.Models.State.Interfaces;
 
 namespace RogueGambit.Models.State;
 
@@ -12,7 +13,7 @@ public class BoardSquareModel : INodeModel
         SquareColor = boardSquare.SquareColor;
         IsOccupied = boardSquare.IsOccupied;
         Instance = boardSquare;
-        _nodeFactory = ServiceLocator.GetNodeFactory<BoardSquare>();
+        _nodeFactory = GetNodeFactory<BoardSquare>();
     }
 
     public BoardSquareModel(Vector2 gridPosition, Color squareColor, bool isOccupied)
@@ -20,7 +21,7 @@ public class BoardSquareModel : INodeModel
         GridPosition = gridPosition;
         SquareColor = squareColor;
         IsOccupied = isOccupied;
-        _nodeFactory = ServiceLocator.GetNodeFactory<BoardSquare>();
+        _nodeFactory = GetNodeFactory<BoardSquare>();
     }
 
     public Vector2 GridPosition { get; set; }

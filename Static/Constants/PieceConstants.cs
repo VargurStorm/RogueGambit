@@ -24,4 +24,6 @@ public static class PieceConstants
 		Queen,
 		King
 	}
+
+	public static Dictionary<PieceType, MoveSet> MoveSetMap { get; set; }
 }

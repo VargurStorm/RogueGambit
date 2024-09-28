@@ -1,4 +1,4 @@
-namespace RogueGambit.Models.State;
+namespace RogueGambit.Models.State.Interfaces;
 
 public interface INodeModel
 {

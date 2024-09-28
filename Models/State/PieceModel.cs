@@ -1,4 +1,7 @@
+using System;
 using RogueGambit.Managers.Factory;
+using RogueGambit.Models.State.Interfaces;
+using static RogueGambit.Utils.BuildMoveSets;
 
 namespace RogueGambit.Models.State;
 
@@ -12,15 +15,16 @@ public class PieceModel : INodeModel
         Color = piece.PieceColor;
         Type = piece.PieceType;
         Instance = piece;
-        _nodeFactory = ServiceLocator.GetNodeFactory<Piece>();
+        _nodeFactory = GetNodeFactory<Piece>();
     }
 
-    public PieceModel(Vector2 gridPosition, PieceColor color, PieceType type)
+    public PieceModel(Vector2 gridPosition, PieceColor color, PieceType type, int rotation = 0)
     {
         GridPosition = gridPosition;
         Color = color;
         Type = type;
-        _nodeFactory = ServiceLocator.GetNodeFactory<Piece>();
+        Rotation = rotation;
+        _nodeFactory = GetNodeFactory<Piece>();
     }
 
     public Vector2 GridPosition { get; set; }
@@ -28,6 +32,10 @@ public class PieceModel : INodeModel
     public PieceType Type { get; set; }
     public Piece Instance { get; set; }
     public PieceOwner Owner { get; set; } = PieceOwner.None;
+    public int Atk { get; set; } = 1;
+    public int Def { get; set; } = 1;
+    public MoveSet MoveSet { get; set; }
+    public int Rotation { get; set; }
 
     public void UpdateNode(bool create = false)
     {
@@ -55,5 +63,16 @@ public class PieceModel : INodeModel
     public override string ToString()
     {
         return $"{Owner}'s {Color} {Type} at {GridPosition}";
+    }
+
+    public void SetMoveSet(MoveSet moveSet)
+    {
+        MoveSet = moveSet;
+    }
+
+    public void SetDefaultMoveSet()
+    {
+        var moveSets = GetDefault();
+        MoveSet = moveSets.TryGetValue(Type, out var moveSet) ? moveSet : throw new Exception("MoveSet not found");
     }
 }

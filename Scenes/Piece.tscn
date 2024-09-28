@@ -42,6 +42,7 @@ texture = SubResource("GradientTexture2D_6dq06")
 [node name="pieceArea2D" type="Area2D" parent="."]
 position = Vector2(32, 32)
 scale = Vector2(4, 4)
+priority = 1
 
 [node name="pieceCollision2D" type="CollisionShape2D" parent="pieceArea2D"]
 shape = SubResource("RectangleShape2D_tgucx")

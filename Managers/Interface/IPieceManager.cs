@@ -1,4 +1,5 @@
 using System;
+using RogueGambit.Models.State.Interfaces;
 
 namespace RogueGambit.Managers.Interface;
 
@@ -13,4 +14,6 @@ public interface IPieceManager
     }
 
     List<Piece> GetPieceNodes();
+
+    void SetDefaultMoveSets();
 }
