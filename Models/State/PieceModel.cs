@@ -73,6 +73,6 @@ public class PieceModel : INodeModel
     public void SetDefaultMoveSet()
     {
         var moveSets = GetDefault();
-        MoveSet = moveSets.TryGetValue(Type, out var moveSet) ? moveSet : throw new Exception("MoveSet not found");
+        MoveSet = moveSets.TryGetValue(Type, out var moveSet) ? moveSet.Clone() : throw new Exception($"MoveSet for {Type} not found");
     }
 }

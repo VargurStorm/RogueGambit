@@ -8,5 +8,6 @@ public enum MoveAttrib
     MoveOnly,
     AttackOnly,
     FirstMove,
-    HasntMoved
+    HasntMoved,
+    ChainedMove
 }

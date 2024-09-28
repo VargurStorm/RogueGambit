@@ -4,6 +4,8 @@ public class MoveLogic : IMoveLogic
 {
     [Inject] private IGameStateManager _gameStateManager;
 
+    private bool HitTarget { get; set; }
+
     public void Initialize()
     {
         InjectDependencies(this);
@@ -17,10 +19,46 @@ public class MoveLogic : IMoveLogic
 
         foreach (var move in moveSet.Moves)
         {
+            if (move.IsChained) continue;
             var direction = RotateVector(move.Direction, piece.Rotation);
             var validRay = CastRay(piece.GridPosition, direction, move.Range, move.Attributes);
 
             validMoves.UnionWith(validRay);
+        }
+
+        if (moveSet.HasChainedMoves)
+        {
+            var chainedMoves = moveSet.Moves
+                                      .Where(m => m.IsChained)
+                                      .OrderBy(m => m.Chain.Item1) // Chain ID
+                                      .ThenBy(m => m.Chain.Item2); // Order in chain
+
+            foreach (var chainGroup in chainedMoves.GroupBy(m => m.Chain.Item1))
+            {
+                var currentOrigin = piece.GridPosition;
+                var chainValidMoves = new HashSet<Vector2>();
+                HitTarget = false;
+
+                foreach (var move in chainGroup)
+                {
+                    if (HitTarget) break;
+                    var direction = RotateVector(move.Direction, piece.Rotation);
+                    var validRay = CastRay(currentOrigin, direction, move.Range, move.Attributes);
+
+                    if (validRay.Count > 0)
+                    {
+                        chainValidMoves.UnionWith(validRay);
+                        currentOrigin = validRay.Last();
+                    }
+                    else
+                    {
+                        chainValidMoves.Clear();
+                        break;
+                    }
+                }
+
+                validMoves.UnionWith(chainValidMoves);
+            }
         }
 
         foreach (var validMove in validMoves) GD.Print(validMove);
@@ -74,7 +112,10 @@ public class MoveLogic : IMoveLogic
             {
                 if (FriendlyFire || pieces[rayPos].Owner != pieces[origin].Owner)
                     if (!isMoveOnly)
+                    {
                         validMoves.Add(rayPos); // Found an enemy or friendly (with friendly fire), move is valid
+                        HitTarget = true;
+                    }
 
                 break; // Friendly piece without friendly fire, stop the ray
             }
