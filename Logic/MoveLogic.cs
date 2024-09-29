@@ -15,55 +15,73 @@ public class MoveLogic : IMoveLogic
     public HashSet<Vector2> GetValidMoves(PieceModel piece)
     {
         var validMoves = new HashSet<Vector2>();
-        var moveSet = piece.MoveSet;
 
-        foreach (var move in moveSet.Moves)
-        {
-            if (move.IsChained) continue;
-            var direction = RotateVector(move.Direction, piece.Rotation);
-            var validRay = CastRay(piece.GridPosition, direction, move.Range, move.Attributes);
+        validMoves.UnionWith(GetNormalMoves(piece));
 
-            validMoves.UnionWith(validRay);
-        }
-
-        if (moveSet.HasChainedMoves)
-        {
-            var chainedMoves = moveSet.Moves
-                                      .Where(m => m.IsChained)
-                                      .OrderBy(m => m.Chain.Item1) // Chain ID
-                                      .ThenBy(m => m.Chain.Item2); // Order in chain
-
-            foreach (var chainGroup in chainedMoves.GroupBy(m => m.Chain.Item1))
-            {
-                var currentOrigin = piece.GridPosition;
-                var chainValidMoves = new HashSet<Vector2>();
-                HitTarget = false;
-
-                foreach (var move in chainGroup)
-                {
-                    if (HitTarget) break;
-                    var direction = RotateVector(move.Direction, piece.Rotation);
-                    var validRay = CastRay(currentOrigin, direction, move.Range, move.Attributes);
-
-                    if (validRay.Count > 0)
-                    {
-                        chainValidMoves.UnionWith(validRay);
-                        currentOrigin = validRay.Last();
-                    }
-                    else
-                    {
-                        chainValidMoves.Clear();
-                        break;
-                    }
-                }
-
-                validMoves.UnionWith(chainValidMoves);
-            }
-        }
+        if (piece.MoveSet.HasChainedMoves) validMoves.UnionWith(GetChainedMoves(piece));
 
         foreach (var validMove in validMoves) GD.Print(validMove);
 
         return validMoves;
+    }
+
+    private HashSet<Vector2> GetNormalMoves(PieceModel piece)
+    {
+        var validMoves = new HashSet<Vector2>();
+        var normalMoves = piece.MoveSet.Moves.Where(move => !move.IsChained);
+
+        foreach (var move in normalMoves)
+        {
+            var direction = RotateVector(move.Direction, piece.Rotation);
+            var validRay = CastRay(piece.GridPosition, direction, move.Range, move.Attributes);
+            validMoves.UnionWith(validRay);
+        }
+
+        return validMoves;
+    }
+
+    private HashSet<Vector2> GetChainedMoves(PieceModel piece)
+    {
+        var validMoves = new HashSet<Vector2>();
+        var chainedMoves = GetSortedChainedMoves(piece.MoveSet);
+
+        foreach (var chainGroup in chainedMoves.GroupBy(m => m.Chain.Item1))
+        {
+            var currentOrigin = piece.GridPosition;
+            var chainValidMoves = new HashSet<Vector2>();
+            HitTarget = false;
+
+            foreach (var move in chainGroup)
+            {
+                if (HitTarget) break;
+
+                var direction = RotateVector(move.Direction, piece.Rotation);
+                var validRay = CastRay(currentOrigin, direction, move.Range, move.Attributes);
+
+                if (validRay.Count > 0)
+                {
+                    chainValidMoves.UnionWith(validRay);
+                    currentOrigin = validRay.Last();
+                }
+                else
+                {
+                    chainValidMoves.Clear();
+                    break;
+                }
+            }
+
+            validMoves.UnionWith(chainValidMoves);
+        }
+
+        return validMoves;
+    }
+
+    private IOrderedEnumerable<MoveSet.Move> GetSortedChainedMoves(MoveSet moveSet)
+    {
+        return moveSet.Moves
+                      .Where(m => m.IsChained)
+                      .OrderBy(m => m.Chain.Item1) // Chain ID
+                      .ThenBy(m => m.Chain.Item2); // Order in chain
     }
 
     private Vector2 RotateVector(Vector2 vector, int degrees)
@@ -71,13 +89,17 @@ public class MoveLogic : IMoveLogic
         if (degrees == 0) return vector;
         degrees = (degrees % 360 + 360) % 360;
 
-        switch (degrees)
+        return degrees switch
         {
-            case 90:  return new Vector2(-vector.Y, vector.X);
-            case 180: return new Vector2(-vector.X, -vector.Y);
-            case 270: return new Vector2(vector.Y, -vector.X);
-        }
+            90 => new Vector2(-vector.Y, vector.X),
+            180 => new Vector2(-vector.X, -vector.Y),
+            270 => new Vector2(vector.Y, -vector.X),
+            _ => RotateVectorArbitrary(vector, degrees)
+        };
+    }
 
+    private Vector2 RotateVectorArbitrary(Vector2 vector, int degrees)
+    {
         var radians = degrees * (Mathf.Pi / 180);
         var cos = Mathf.Cos(radians);
         var sin = Mathf.Sin(radians);
