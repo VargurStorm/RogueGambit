@@ -3,7 +3,7 @@ using RogueGambit.Models.State.Interfaces;
 
 namespace RogueGambit.Handlers.Interface;
 
-public interface IPieceManager
+public interface IPieceHandler
 {
     Node2D CreateNoteForModel(INodeModel model);
     void LoadScenes();

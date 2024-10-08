@@ -4,7 +4,7 @@ namespace RogueGambit.Logic;
 
 public class MoveLogic : IMoveLogic
 {
-    [Inject] private IGameStateManager _gameStateManager;
+    [Inject] private IGameStateHandler _gameStateHandler;
 
     private bool HitTarget { get; set; }
 
@@ -117,8 +117,8 @@ public class MoveLogic : IMoveLogic
 
     private List<Vector2> CastRay(Vector2 origin, Vector2 direction, int distance, HashSet<MoveAttrib> attributes = null)
     {
-        var pieces = _gameStateManager.GameState.Pieces;
-        var board = _gameStateManager.GameState.BoardSquares;
+        var pieces = _gameStateHandler.GameState.Pieces;
+        var board = _gameStateHandler.GameState.BoardSquares;
 
         var isAttackOnly = attributes?.Contains(MoveAttrib.AttackOnly) ?? false;
         var isMoveOnly = attributes?.Contains(MoveAttrib.MoveOnly) ?? false;

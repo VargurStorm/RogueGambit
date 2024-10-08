@@ -1,6 +1,6 @@
 namespace RogueGambit.Handlers.Interface;
 
-public interface ITurnManager
+public interface ITurnHandler
 {
     void UpdateTurn();
     void AdvanceTurn();

@@ -3,135 +3,135 @@ using RogueGambit.Handlers.Interface;
 
 namespace RogueGambit.Handlers;
 
-public partial class GameStateHandler : Node, IGameStateManager
+public partial class GameStateHandler : Node, IGameStateHandler
 {
-	[Inject] private IBoardManager _boardManager;
-	[Inject] private IInputManager _inputManager;
-	[Inject] private IMoveLogic _moveLogic;
-	[Inject] private IMoveManager _moveManager;
-	[Inject] private IPieceManager _pieceManager;
-	[Inject] private ITurnManager _turnManager;
+    [Inject] private IBoardHandler _boardHandler;
+    [Inject] private IInputHandler _inputHandler;
+    [Inject] private IMoveHandler _moveHandler;
+    [Inject] private IMoveLogic _moveLogic;
+    [Inject] private IPieceHandler _pieceHandler;
+    [Inject] private ITurnHandler _turnHandler;
 
-	public PlayerStatus PlayerStatus
-	{
-		get => GameState.PlayerStatus;
-		set => GameState.PlayerStatus = value;
-	}
-
-
-	public GameState GameState { get; set; }
-
-	public void InitializeGameState()
-	{
-		GameState = new GameState();
-	}
-
-	public void LoadScenes()
-	{
-		_boardManager.LoadScenes();
-		_pieceManager.LoadScenes();
-	}
-
-	public void PlaceBoard(int boardStart, Vector2 boardShape, List<List<int>> boardMask = null)
-	{
-		GameState.BoardSquares = Handlers.BoardHandler.BuildBoardSquareModels(boardStart, boardShape, boardMask);
-		GameState.BoardSquares.Values.ToList().ForEach(square => square.UpdateNode(true));
-		GameState.BoardShape = boardShape;
-		GameState.BoardMask = boardMask;
-	}
-
-	public void PlacePieces()
-	{
-		GameState.Pieces = PieceHandler.CreatePieceModelsDefault();
-		GameState.Pieces.Values.ToList().ForEach(piece => piece.UpdateNode(true));
-	}
-
-	public void UpdateGameState()
-	{
-		GameState.FindOccupiedSquares();
-		GameState.UpdateBoardNodes();
-		GameState.UpdatePieceNodes();
-	}
-
-	public void AssignColorToOwner(PieceColor color, PieceOwner owner)
-	{
-		foreach (var piece in GameState.Pieces.Values.Where(piece => piece.Color == color)) piece.Owner = owner;
-	}
-
-	public void SetTurn(PieceOwner owner)
-	{
-		GameState.CurrentTurn = owner;
-		_turnManager.SetTurn(owner);
-	}
+    public PlayerStatus PlayerStatus
+    {
+        get => GameState.PlayerStatus;
+        set => GameState.PlayerStatus = value;
+    }
 
 
-	public void MovePiece(PieceModel piece, Vector2 targetPosition)
-	{
-		_moveManager.MovePiece(piece, targetPosition);
-		DeselectPiece();
-		UpdateGameState();
-		AdvanceTurn();
-	}
+    public GameState GameState { get; set; }
 
-	public void ToggleSelectedPiece(PieceModel piece)
-	{
-		_moveManager.ToggleSelectedPiece(piece);
-	}
+    public void InitializeGameState()
+    {
+        GameState = new GameState();
+    }
 
-	public void CapturePiece(PieceModel attacker, PieceModel targetPiece)
-	{
-		GameState.Graveyard.Add(targetPiece);
-		GameState.Pieces.Remove(targetPiece.GridPosition);
-		targetPiece.Instance.QueueFree();
-		MovePiece(attacker, targetPiece.GridPosition);
-	}
+    public void LoadScenes()
+    {
+        _boardHandler.LoadScenes();
+        _pieceHandler.LoadScenes();
+    }
 
-	public void SelectPiece(PieceModel piece)
-	{
-		_moveManager.SelectPiece(piece);
-		var validMoves = _moveLogic.GetValidMoves(piece);
-		foreach (var move in validMoves)
-		{
-			var square = GameState.BoardSquares[move];
-			square.Instance.TargetSprite.Visible = true;
-		}
-	}
+    public void PlaceBoard(int boardStart, Vector2 boardShape, List<List<int>> boardMask = null)
+    {
+        GameState.BoardSquares = BoardHandler.BuildBoardSquareModels(boardStart, boardShape, boardMask);
+        GameState.BoardSquares.Values.ToList().ForEach(square => square.UpdateNode(true));
+        GameState.BoardShape = boardShape;
+        GameState.BoardMask = boardMask;
+    }
 
-	public void PromotePiece(PieceModel piece, PieceType newType)
-	{
-		throw new NotImplementedException();
-	}
+    public void PlacePieces()
+    {
+        GameState.Pieces = PieceHandler.CreatePieceModelsDefault();
+        GameState.Pieces.Values.ToList().ForEach(piece => piece.UpdateNode(true));
+    }
 
+    public void UpdateGameState()
+    {
+        GameState.FindOccupiedSquares();
+        GameState.UpdateBoardNodes();
+        GameState.UpdatePieceNodes();
+    }
 
-	public override void _Ready()
-	{
-		GD.Print("...GameStateHandler ready.");
-		InjectDependencies(this);
-		InitializeGameState();
-		LoadScenes();
+    public void AssignColorToOwner(PieceColor color, PieceOwner owner)
+    {
+        foreach (var piece in GameState.Pieces.Values.Where(piece => piece.Color == color)) piece.Owner = owner;
+    }
 
-		PlaceBoard(BoardStartX, new Vector2(8, 8));
-		PlacePieces();
-		_pieceManager.SetDefaultMoveSets();
-		_inputManager.Initialize();
-		_moveLogic.Initialize();
-
-		AssignColorToOwner(PieceColor.White, PieceOwner.Player);
-		AssignColorToOwner(PieceColor.Black, PieceOwner.Player);
-
-		UpdateGameState();
-		SetTurn(PieceOwner.Player);
-	}
+    public void SetTurn(PieceOwner owner)
+    {
+        GameState.CurrentTurn = owner;
+        _turnHandler.SetTurn(owner);
+    }
 
 
-	public void AdvanceTurn()
-	{
-		_turnManager.AdvanceTurn();
-	}
+    public void MovePiece(PieceModel piece, Vector2 targetPosition)
+    {
+        _moveHandler.MovePiece(piece, targetPosition);
+        DeselectPiece();
+        UpdateGameState();
+        AdvanceTurn();
+    }
 
-	public void DeselectPiece()
-	{
-		_moveManager.DeselectPiece();
-		foreach (var square in GameState.BoardSquares.Values) square.Instance.TargetSprite.Visible = false;
-	}
+    public void ToggleSelectedPiece(PieceModel piece)
+    {
+        _moveHandler.ToggleSelectedPiece(piece);
+    }
+
+    public void CapturePiece(PieceModel attacker, PieceModel targetPiece)
+    {
+        GameState.Graveyard.Add(targetPiece);
+        GameState.Pieces.Remove(targetPiece.GridPosition);
+        targetPiece.Instance.QueueFree();
+        MovePiece(attacker, targetPiece.GridPosition);
+    }
+
+    public void SelectPiece(PieceModel piece)
+    {
+        _moveHandler.SelectPiece(piece);
+        var validMoves = _moveLogic.GetValidMoves(piece);
+        foreach (var move in validMoves)
+        {
+            var square = GameState.BoardSquares[move];
+            square.Instance.TargetSprite.Visible = true;
+        }
+    }
+
+    public void PromotePiece(PieceModel piece, PieceType newType)
+    {
+        throw new NotImplementedException();
+    }
+
+
+    public override void _Ready()
+    {
+        GD.Print("...GameStateHandler ready.");
+        InjectDependencies(this);
+        InitializeGameState();
+        LoadScenes();
+
+        PlaceBoard(BoardStartX, new Vector2(8, 8));
+        PlacePieces();
+        _pieceHandler.SetDefaultMoveSets();
+        _inputHandler.Initialize();
+        _moveLogic.Initialize();
+
+        AssignColorToOwner(PieceColor.White, PieceOwner.Player);
+        AssignColorToOwner(PieceColor.Black, PieceOwner.Player);
+
+        UpdateGameState();
+        SetTurn(PieceOwner.Player);
+    }
+
+
+    public void AdvanceTurn()
+    {
+        _turnHandler.AdvanceTurn();
+    }
+
+    public void DeselectPiece()
+    {
+        _moveHandler.DeselectPiece();
+        foreach (var square in GameState.BoardSquares.Values) square.Instance.TargetSprite.Visible = false;
+    }
 }

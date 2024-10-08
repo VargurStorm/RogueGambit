@@ -2,7 +2,7 @@ using System;
 
 namespace RogueGambit.Handlers.Interface;
 
-public interface IInputManager
+public interface IInputHandler
 {
     void ConnectSignals();
 

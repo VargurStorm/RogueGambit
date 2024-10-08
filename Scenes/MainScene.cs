@@ -8,29 +8,29 @@ using BoardHandler = RogueGambit.Handlers.BoardHandler;
 
 public partial class MainScene : Node2D
 {
-	public override void _Ready()
-	{
-		GD.Print("...MainScene ready.");
-	}
+    public override void _Ready()
+    {
+        GD.Print("...MainScene ready.");
+    }
 
-	public override void _EnterTree()
-	{
-		GD.Print("...MainScene entered tree.");
-		RegisterServices();
-	}
+    public override void _EnterTree()
+    {
+        GD.Print("...MainScene entered tree.");
+        RegisterServices();
+    }
 
-	private void RegisterServices()
-	{
-		RegisterService<IGameStateManager>(GetNode<GameStateHandler>("/root/MainScene/GameStateHandler"));
-		RegisterService<IBoardManager>(GetNode<BoardHandler>("/root/MainScene/BoardHandler"));
-		RegisterService<IInputManager>(GetNode<InputHandler>("/root/MainScene/InputHandler"));
-		RegisterService<IMoveManager>(GetNode<MoveHandler>("/root/MainScene/MoveHandler"));
-		RegisterService<IPieceManager>(GetNode<PieceHandler>("/root/MainScene/PieceHandler"));
-		RegisterService<ITurnManager>(GetNode<TurnHandler>("/root/MainScene/TurnHandler"));
+    private void RegisterServices()
+    {
+        RegisterService<IGameStateHandler>(GetNode<GameStateHandler>("/root/MainScene/GameStateHandler"));
+        RegisterService<IBoardHandler>(GetNode<BoardHandler>("/root/MainScene/BoardHandler"));
+        RegisterService<IInputHandler>(GetNode<InputHandler>("/root/MainScene/InputHandler"));
+        RegisterService<IMoveHandler>(GetNode<MoveHandler>("/root/MainScene/MoveHandler"));
+        RegisterService<IPieceHandler>(GetNode<PieceHandler>("/root/MainScene/PieceHandler"));
+        RegisterService<ITurnHandler>(GetNode<TurnHandler>("/root/MainScene/TurnHandler"));
 
-		RegisterService<IMoveLogic>(new MoveLogic());
+        RegisterService<IMoveLogic>(new MoveLogic());
 
-		RegisterNodeFactory<BoardSquare>((BoardHandler)GetService<IBoardManager>());
-		RegisterNodeFactory<Piece>((PieceHandler)GetService<IPieceManager>());
-	}
+        RegisterNodeFactory<BoardSquare>((BoardHandler)GetService<IBoardHandler>());
+        RegisterNodeFactory<Piece>((PieceHandler)GetService<IPieceHandler>());
+    }
 }

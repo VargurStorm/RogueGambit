@@ -1,6 +1,6 @@
 namespace RogueGambit.Handlers.Interface;
 
-public interface IMoveManager
+public interface IMoveHandler
 {
     PieceModel SelectedPiece { get; }
 

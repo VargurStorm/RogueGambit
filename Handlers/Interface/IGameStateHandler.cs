@@ -1,6 +1,6 @@
 namespace RogueGambit.Handlers.Interface;
 
-public interface IGameStateManager
+public interface IGameStateHandler
 {
     GameState GameState { get; set; }
     PlayerStatus PlayerStatus { get; set; }
