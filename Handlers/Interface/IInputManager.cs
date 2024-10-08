@@ -1,6 +1,6 @@
 using System;
 
-namespace RogueGambit.Managers.Interface;
+namespace RogueGambit.Handlers.Interface;
 
 public interface IInputManager
 {

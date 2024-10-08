@@ -1,6 +1,8 @@
-namespace RogueGambit.Managers;
+using RogueGambit.Handlers.Interface;
 
-public partial class MoveManager : Node2D, IMoveManager
+namespace RogueGambit.Handlers;
+
+public partial class MoveHandler : Node2D, IMoveManager
 {
 	[Inject] private IGameStateManager _gameStateManager;
 	public PieceModel SelectedPiece { get; private set; }
@@ -48,7 +50,7 @@ public partial class MoveManager : Node2D, IMoveManager
 
 	public override void _Ready()
 	{
-		GD.Print("...MoveManager ready.");
+		GD.Print("...MoveHandler ready.");
 		Initialize();
 	}
 

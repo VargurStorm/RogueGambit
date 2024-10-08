@@ -2,34 +2,34 @@
 
 [ext_resource type="PackedScene" uid="uid://dmhfw5g8hdm0r" path="res://Scenes/ChessBoard.tscn" id="1_f15xr"]
 [ext_resource type="Script" path="res://Scenes/MainScene.cs" id="1_uaaf5"]
-[ext_resource type="Script" path="res://Managers/PieceManager.cs" id="2_5swv3"]
-[ext_resource type="Script" path="res://Managers/InputManager.cs" id="3_bs7yn"]
-[ext_resource type="Script" path="res://Managers/TurnManager.cs" id="4_1ij8x"]
-[ext_resource type="Script" path="res://Managers/GameStateManager.cs" id="4_6x7k6"]
-[ext_resource type="Script" path="res://Managers/MoveManager.cs" id="4_7i4mk"]
+[ext_resource type="Script" path="res://Handlers/PieceHandler.cs" id="2_5swv3"]
+[ext_resource type="Script" path="res://Handlers/InputHandler.cs" id="3_bs7yn"]
+[ext_resource type="Script" path="res://Handlers/TurnHandler.cs" id="4_1ij8x"]
+[ext_resource type="Script" path="res://Handlers/GameStateHandler.cs" id="4_6x7k6"]
+[ext_resource type="Script" path="res://Handlers/MoveHandler.cs" id="4_7i4mk"]
 [ext_resource type="Texture2D" uid="uid://h0vrb4skn4kr" path="res://Assets/UI/turn-white.png" id="4_78mpp"]
 
 [node name="MainScene" type="Node2D"]
 script = ExtResource("1_uaaf5")
 
-[node name="BoardManager" parent="." instance=ExtResource("1_f15xr")]
+[node name="BoardHandler" parent="." instance=ExtResource("1_f15xr")]
 
-[node name="PieceManager" type="Node2D" parent="."]
+[node name="PieceHandler" type="Node2D" parent="."]
 z_index = 5
 script = ExtResource("2_5swv3")
 
-[node name="InputManager" type="Node2D" parent="."]
+[node name="InputHandler" type="Node2D" parent="."]
 script = ExtResource("3_bs7yn")
 
-[node name="MoveManager" type="Node2D" parent="."]
+[node name="MoveHandler" type="Node2D" parent="."]
 script = ExtResource("4_7i4mk")
 
-[node name="TurnManager" type="Node2D" parent="."]
+[node name="TurnHandler" type="Node2D" parent="."]
 script = ExtResource("4_1ij8x")
 
-[node name="TurnSprite2D" type="Sprite2D" parent="TurnManager"]
+[node name="TurnSprite2D" type="Sprite2D" parent="TurnHandler"]
 scale = Vector2(0.4, 0.4)
 texture = ExtResource("4_78mpp")
 
-[node name="GameStateManager" type="Node" parent="."]
+[node name="GameStateHandler" type="Node" parent="."]
 script = ExtResource("4_6x7k6")

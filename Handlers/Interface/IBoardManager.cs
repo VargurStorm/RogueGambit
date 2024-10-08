@@ -1,7 +1,7 @@
 using System;
 using RogueGambit.Models.State.Interfaces;
 
-namespace RogueGambit.Managers.Interface;
+namespace RogueGambit.Handlers.Interface;
 
 public interface IBoardManager
 {

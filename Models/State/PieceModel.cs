@@ -1,5 +1,5 @@
 using System;
-using RogueGambit.Managers.Factory;
+using RogueGambit.Handlers.Factory;
 using RogueGambit.Models.State.Interfaces;
 using static RogueGambit.Utils.BuildMoveSets;
 

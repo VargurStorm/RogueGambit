@@ -1,9 +1,10 @@
+using RogueGambit.Handlers.Interface;
 using RogueGambit.Logic;
 using Piece = RogueGambit.Models.Piece;
 
-namespace RogueGambit.Managers;
+namespace RogueGambit.Handlers;
 
-public partial class InputManager : Node2D, IInputManager
+public partial class InputHandler : Node2D, IInputManager
 {
 	[Inject] private IBoardManager _boardManager;
 	[Inject] private IGameStateManager _gameStateManager;
@@ -39,7 +40,7 @@ public partial class InputManager : Node2D, IInputManager
 
 	public override void _Ready()
 	{
-		GD.Print("...InputManager ready.");
+		GD.Print("...InputHandler ready.");
 	}
 
 	public override void _Input(InputEvent @event)

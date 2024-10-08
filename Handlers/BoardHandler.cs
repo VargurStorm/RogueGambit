@@ -1,9 +1,10 @@
-using RogueGambit.Managers.Factory;
+using RogueGambit.Handlers.Factory;
+using RogueGambit.Handlers.Interface;
 using RogueGambit.Models.State.Interfaces;
 
-namespace RogueGambit.Managers;
+namespace RogueGambit.Handlers;
 
-public partial class BoardManager : Node2D, INodeFactory, IBoardManager
+public partial class BoardHandler : Node2D, INodeFactory, IBoardManager
 {
 	private PackedScene _boardSquareScene;
 
@@ -74,6 +75,6 @@ public partial class BoardManager : Node2D, INodeFactory, IBoardManager
 
 	public override void _Ready()
 	{
-		GD.Print("...BoardManager ready.");
+		GD.Print("...BoardHandler ready.");
 	}
 }

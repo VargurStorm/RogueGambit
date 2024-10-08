@@ -1,6 +1,6 @@
 using RogueGambit.Models.State.Interfaces;
 
-namespace RogueGambit.Managers.Factory;
+namespace RogueGambit.Handlers.Factory;
 
 public interface INodeFactory
 {

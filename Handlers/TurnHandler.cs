@@ -1,6 +1,8 @@
-namespace RogueGambit.Managers;
+using RogueGambit.Handlers.Interface;
 
-public partial class TurnManager : Node2D, ITurnManager
+namespace RogueGambit.Handlers;
+
+public partial class TurnHandler : Node2D, ITurnManager
 {
 	[Inject] private IGameStateManager _gameStateManager;
 	private Sprite2D _turnSprite;
@@ -42,7 +44,7 @@ public partial class TurnManager : Node2D, ITurnManager
 
 	public override void _Ready()
 	{
-		GD.Print("...TurnManager ready.");
+		GD.Print("...TurnHandler ready.");
 		Initialize();
 	}
 

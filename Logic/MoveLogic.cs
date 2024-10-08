@@ -1,3 +1,5 @@
+using RogueGambit.Handlers.Interface;
+
 namespace RogueGambit.Logic;
 
 public class MoveLogic : IMoveLogic

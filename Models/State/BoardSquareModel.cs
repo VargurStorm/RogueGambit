@@ -1,4 +1,4 @@
-using RogueGambit.Managers.Factory;
+using RogueGambit.Handlers.Factory;
 using RogueGambit.Models.State.Interfaces;
 
 namespace RogueGambit.Models.State;

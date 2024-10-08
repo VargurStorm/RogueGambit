@@ -1,5 +1,10 @@
+using System.Runtime.CompilerServices;
+using RogueGambit.Handlers;
+using RogueGambit.Handlers.Interface;
 using RogueGambit.Logic;
-using RogueGambit.Logic.Interfaces;
+using BoardHandler = RogueGambit.Handlers.BoardHandler;
+
+[assembly: InternalsVisibleTo("RogueGambit.Tests")]
 
 public partial class MainScene : Node2D
 {
@@ -16,16 +21,16 @@ public partial class MainScene : Node2D
 
 	private void RegisterServices()
 	{
-		RegisterService<IGameStateManager>(GetNode<GameStateManager>("/root/MainScene/GameStateManager"));
-		RegisterService<IBoardManager>(GetNode<BoardManager>("/root/MainScene/BoardManager"));
-		RegisterService<IInputManager>(GetNode<InputManager>("/root/MainScene/InputManager"));
-		RegisterService<IMoveManager>(GetNode<MoveManager>("/root/MainScene/MoveManager"));
-		RegisterService<IPieceManager>(GetNode<PieceManager>("/root/MainScene/PieceManager"));
-		RegisterService<ITurnManager>(GetNode<TurnManager>("/root/MainScene/TurnManager"));
+		RegisterService<IGameStateManager>(GetNode<GameStateHandler>("/root/MainScene/GameStateHandler"));
+		RegisterService<IBoardManager>(GetNode<BoardHandler>("/root/MainScene/BoardHandler"));
+		RegisterService<IInputManager>(GetNode<InputHandler>("/root/MainScene/InputHandler"));
+		RegisterService<IMoveManager>(GetNode<MoveHandler>("/root/MainScene/MoveHandler"));
+		RegisterService<IPieceManager>(GetNode<PieceHandler>("/root/MainScene/PieceHandler"));
+		RegisterService<ITurnManager>(GetNode<TurnHandler>("/root/MainScene/TurnHandler"));
 
 		RegisterService<IMoveLogic>(new MoveLogic());
 
-		RegisterNodeFactory<BoardSquare>((BoardManager)GetService<IBoardManager>());
-		RegisterNodeFactory<Piece>((PieceManager)GetService<IPieceManager>());
+		RegisterNodeFactory<BoardSquare>((BoardHandler)GetService<IBoardManager>());
+		RegisterNodeFactory<Piece>((PieceHandler)GetService<IPieceManager>());
 	}
 }

@@ -1,3 +1,6 @@
+using RogueGambit.Handlers;
+using BoardHandler = RogueGambit.Handlers.BoardHandler;
+
 namespace RogueGambit.Models.State;
 
 public class GameState
@@ -18,10 +21,10 @@ public class GameState
     public PieceOwner CurrentTurn { get; set; }
     public PlayerStatus PlayerStatus { get; set; }
 
-    public void ReadGameStateFromNodes(BoardManager boardManager, PieceManager pieceManager)
+    public void ReadGameStateFromNodes(BoardHandler boardHandler, PieceHandler pieceHandler)
     {
-        var boardSquares = boardManager.GetBoardSquareNodes();
-        var pieces = pieceManager.GetPieceNodes();
+        var boardSquares = boardHandler.GetBoardSquareNodes();
+        var pieces = pieceHandler.GetPieceNodes();
 
         foreach (var square in boardSquares) BoardSquares.Add(square.GridPosition, new BoardSquareModel(square));
         foreach (var piece in pieces) Pieces.Add(piece.GridPosition, new PieceModel(piece));

@@ -1,10 +1,11 @@
-using RogueGambit.Managers.Factory;
+using RogueGambit.Handlers.Factory;
+using RogueGambit.Handlers.Interface;
 using RogueGambit.Models.State.Interfaces;
 using Piece = RogueGambit.Models.Piece;
 
-namespace RogueGambit.Managers;
+namespace RogueGambit.Handlers;
 
-public partial class PieceManager : Node2D, INodeFactory, IPieceManager
+public partial class PieceHandler : Node2D, INodeFactory, IPieceManager
 {
 	[Inject] private IGameStateManager _gameStateManager;
 	private PackedScene _pieceScene;
@@ -92,7 +93,7 @@ public partial class PieceManager : Node2D, INodeFactory, IPieceManager
 
 	public override void _Ready()
 	{
-		GD.Print("...PieceManager ready.");
+		GD.Print("...PieceHandler ready.");
 		Initialize();
 	}
 

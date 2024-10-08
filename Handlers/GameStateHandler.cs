@@ -1,8 +1,9 @@
 using System;
+using RogueGambit.Handlers.Interface;
 
-namespace RogueGambit.Managers;
+namespace RogueGambit.Handlers;
 
-public partial class GameStateManager : Node, IGameStateManager
+public partial class GameStateHandler : Node, IGameStateManager
 {
 	[Inject] private IBoardManager _boardManager;
 	[Inject] private IInputManager _inputManager;
@@ -33,7 +34,7 @@ public partial class GameStateManager : Node, IGameStateManager
 
 	public void PlaceBoard(int boardStart, Vector2 boardShape, List<List<int>> boardMask = null)
 	{
-		GameState.BoardSquares = BoardManager.BuildBoardSquareModels(boardStart, boardShape, boardMask);
+		GameState.BoardSquares = Handlers.BoardHandler.BuildBoardSquareModels(boardStart, boardShape, boardMask);
 		GameState.BoardSquares.Values.ToList().ForEach(square => square.UpdateNode(true));
 		GameState.BoardShape = boardShape;
 		GameState.BoardMask = boardMask;
@@ -41,7 +42,7 @@ public partial class GameStateManager : Node, IGameStateManager
 
 	public void PlacePieces()
 	{
-		GameState.Pieces = PieceManager.CreatePieceModelsDefault();
+		GameState.Pieces = PieceHandler.CreatePieceModelsDefault();
 		GameState.Pieces.Values.ToList().ForEach(piece => piece.UpdateNode(true));
 	}
 
@@ -104,7 +105,7 @@ public partial class GameStateManager : Node, IGameStateManager
 
 	public override void _Ready()
 	{
-		GD.Print("...GameStateManager ready.");
+		GD.Print("...GameStateHandler ready.");
 		InjectDependencies(this);
 		InitializeGameState();
 		LoadScenes();

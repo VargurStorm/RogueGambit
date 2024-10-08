@@ -2,6 +2,8 @@
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rogue Gambit", "Rogue Gambit.csproj", "{8F5C5AB6-B6CF-41C0-B6BD-6CC3BF98427D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rogue Gambit.Tests", "..\Rogue Gambit.Tests\Rogue Gambit.Tests.csproj", "{E6C086BA-976E-48F5-93DD-4F463AB2A927}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 	Debug|Any CPU = Debug|Any CPU
@@ -15,5 +17,11 @@ Global
 		{8F5C5AB6-B6CF-41C0-B6BD-6CC3BF98427D}.ExportDebug|Any CPU.Build.0 = ExportDebug|Any CPU
 		{8F5C5AB6-B6CF-41C0-B6BD-6CC3BF98427D}.ExportRelease|Any CPU.ActiveCfg = ExportRelease|Any CPU
 		{8F5C5AB6-B6CF-41C0-B6BD-6CC3BF98427D}.ExportRelease|Any CPU.Build.0 = ExportRelease|Any CPU
+		{E6C086BA-976E-48F5-93DD-4F463AB2A927}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6C086BA-976E-48F5-93DD-4F463AB2A927}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6C086BA-976E-48F5-93DD-4F463AB2A927}.ExportDebug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6C086BA-976E-48F5-93DD-4F463AB2A927}.ExportDebug|Any CPU.Build.0 = Debug|Any CPU
+		{E6C086BA-976E-48F5-93DD-4F463AB2A927}.ExportRelease|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6C086BA-976E-48F5-93DD-4F463AB2A927}.ExportRelease|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 EndGlobal
