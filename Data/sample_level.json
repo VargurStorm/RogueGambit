@@ -1,0 +1,131 @@
+{
+  "GameState": {
+    "CurrentTurn": "Player",
+    "TurnNumber": 0,
+    "Pieces": [
+      {
+        "Type": "Pawn",
+        "Color": "White",
+        "Owner": "Player",
+        "Rotation": 180,
+        "HasMoved": false,
+        "GridPos": {
+          "X": 0,
+          "Y": 1
+        },
+        "MoveSet": {
+          "LoadMoveSet": "Pawn",
+          "Moves": [
+            {
+              "Direction": {
+                "X": 0,
+                "Y": 1
+              },
+              "Range": 1,
+              "Chain": {
+                "ChainNumber": 1,
+                "ChainPos": 1
+              },
+              "Attributes": [
+                "Slide",
+                "AttackAndMove"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "Type": "Pawn",
+        "Color": "Black",
+        "Owner": "Ai",
+        "Rotation": 0,
+        "HasMoved": false,
+        "GridPos": {
+          "X": 1,
+          "Y": 6
+        },
+        "MoveSet": {
+          "LoadMoveSet": "Pawn",
+          "Moves": [
+            {
+              "Direction": {
+                "X": 0,
+                "Y": 1
+              },
+              "Range": 1,
+              "Chain": {
+                "ChainNumber": 1,
+                "ChainPos": 1
+              },
+              "Attributes": [
+                "Slide",
+                "AttackAndMove"
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "Graveyard": [
+      {
+        "Pieces": [
+          {
+            "Type": "Pawn",
+            "Color": "Black",
+            "Owner": "Player",
+            "Rotation": 0,
+            "HasMoved": false,
+            "GridPos": {
+              "X": 1,
+              "Y": 6
+            },
+            "MoveSet": {
+              "LoadMoveSet": "Pawn",
+              "Moves": [
+                {
+                  "Direction": {
+                    "X": 0,
+                    "Y": 1
+                  },
+                  "Range": 1,
+                  "Chain": {
+                    "ChainNumber": 1,
+                    "ChainPos": 1
+                  },
+                  "Attributes": [
+                    "Slide",
+                    "AttackAndMove"
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "Board": {
+      "BoardShape": {
+        "X": 8,
+        "Y": 8
+      },
+      "MaskedSquares": [
+        {
+          "X": 0,
+          "Y": 0
+        }
+      ]
+    },
+    "Players": [
+      {
+        "Color": "White",
+        "Name": "Laura",
+        "Controller": "Player"
+      },
+      {
+        "Color": "Black",
+        "Name": "Alex",
+        "Controller": "Ai"
+      }
+    ]
+  }
+}

@@ -8,15 +8,22 @@ namespace RogueGambit.Models;
 public class MoveSet
 {
     public readonly HashSet<Move> Moves = new();
+    public readonly string Name = string.Empty;
 
     public MoveSet()
     {
     }
 
-    public MoveSet(HashSet<Move> moves) : this()
+    public MoveSet(string name)
+    {
+        Name = name;
+    }
+
+    public MoveSet(string name, HashSet<Move> moves) : this(name)
     {
         foreach (var move in moves) Moves.Add(move);
     }
+
 
     public bool HasChainedMoves { get; internal set; }
 

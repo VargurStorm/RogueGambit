@@ -1,0 +1,59 @@
+{
+  "MoveSets": [
+    {
+      "Name": "Pawn",
+      "Moves": [
+        {
+          "Direction": {
+            "X": 0,
+            "Y": 1
+          },
+          "Range": 1,
+          "Chain": {
+            "ChainNumber": 1,
+            "ChainPos": 1
+          },
+          "Attributes": [
+            "Slide",
+            "AttackAndMove"
+          ]
+        },
+        {
+          "Direction": {
+            "X": 0,
+            "Y": -1
+          },
+          "Range": 1,
+          "Chain": {
+            "ChainNumber": 1,
+            "ChainPos": 1
+          },
+          "Attributes": [
+            "Slide",
+            "AttackAndMove"
+          ]
+        }
+      ]
+    },
+    {
+      "Name": "Rook",
+      "Moves": [
+        {
+          "Direction": {
+            "X": 0,
+            "Y": 1
+          },
+          "Range": 1,
+          "Chain": {
+            "ChainNumber": 1,
+            "ChainPos": 1
+          },
+          "Attributes": [
+            "Slide",
+            "AttackAndMove"
+          ]
+        }
+      ]
+    }
+  ]
+}

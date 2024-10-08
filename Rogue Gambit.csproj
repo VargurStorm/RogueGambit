@@ -6,4 +6,8 @@
         <EnableDynamicLoading>true</EnableDynamicLoading>
         <RootNamespace>RogueGambit</RootNamespace>
     </PropertyGroup>
+    <ItemGroup>
+        <Content Include="Data\default_movesets.json"/>
+        <Content Include="Data\sample_level.json"/>
+    </ItemGroup>
 </Project>

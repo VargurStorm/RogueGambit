@@ -26,7 +26,7 @@ public static class BuildMoveSets
 
     private static MoveSet CreatePawnMoveSet()
     {
-        var pawnMoveSet = new MoveSet();
+        var pawnMoveSet = new MoveSet("Pawn");
         pawnMoveSet.AddMove(new Vector2(0, 1), 1, default, Slide, MoveOnly);
         pawnMoveSet.AddMove(new Vector2(0, 1), 2, default, Slide, MoveOnly, FirstMove);
         pawnMoveSet.AddMove(new Vector2(1, 1), 1, default, Slide, AttackOnly);
@@ -36,7 +36,7 @@ public static class BuildMoveSets
 
     private static MoveSet CreateRookMoveSet()
     {
-        var rookMoveSet = new MoveSet();
+        var rookMoveSet = new MoveSet("Rook");
         rookMoveSet.AddMove(new Vector2(0, 1), 8, default, Slide, AttackAndMove);
         rookMoveSet.AddMove(new Vector2(0, -1), 8, default, Slide, AttackAndMove);
         rookMoveSet.AddMove(new Vector2(1, 0), 8, default, Slide, AttackAndMove);
@@ -48,7 +48,7 @@ public static class BuildMoveSets
 
     private static MoveSet CreateKnightMoveSet()
     {
-        var knightMoveSet = new MoveSet();
+        var knightMoveSet = new MoveSet("Knight");
         knightMoveSet.AddMove(new Vector2(1, 2), 1, default, Jump, AttackAndMove);
         knightMoveSet.AddMove(new Vector2(2, 1), 1, default, Jump, AttackAndMove);
         knightMoveSet.AddMove(new Vector2(2, -1), 1, default, Jump, AttackAndMove);
@@ -62,7 +62,7 @@ public static class BuildMoveSets
 
     private static MoveSet CreateBishopMoveSet()
     {
-        var bishopMoveSet = new MoveSet();
+        var bishopMoveSet = new MoveSet("Bishop");
         bishopMoveSet.AddMove(new Vector2(1, 1), 8, default, Slide, AttackAndMove);
         bishopMoveSet.AddMove(new Vector2(1, -1), 8, default, Slide, AttackAndMove);
         bishopMoveSet.AddMove(new Vector2(-1, 1), 8, default, Slide, AttackAndMove);
@@ -72,7 +72,7 @@ public static class BuildMoveSets
 
     private static MoveSet CreateQueenMoveSet()
     {
-        var queenMoveSet = new MoveSet();
+        var queenMoveSet = new MoveSet("Queen");
         queenMoveSet.AddMove(new Vector2(0, 1), 8, default, Slide, AttackAndMove);
         queenMoveSet.AddMove(new Vector2(0, -1), 8, default, Slide, AttackAndMove);
         queenMoveSet.AddMove(new Vector2(1, 0), 8, default, Slide, AttackAndMove);
@@ -86,7 +86,7 @@ public static class BuildMoveSets
 
     private static MoveSet CreateKingMoveSet()
     {
-        var kingMoveSet = new MoveSet();
+        var kingMoveSet = new MoveSet("King");
         kingMoveSet.AddMove(new Vector2(0, 1), 1, default, Slide, AttackAndMove);
         kingMoveSet.AddMove(new Vector2(0, -1), 1, default, Slide, AttackAndMove);
         kingMoveSet.AddMove(new Vector2(1, 0), 1, default, Slide, AttackAndMove);
